@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="cwpAutoStowage1.5:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/cwpAutoStowage1_5_jar</output-path>
+    <root id="archive" name="cwpAutoStowage1.5.jar">
+      <element id="module-output" name="cwpAutoStowage1.5" />
+    </root>
+  </artifact>
+</component>
