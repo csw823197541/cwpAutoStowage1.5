@@ -55,7 +55,7 @@ public class MOSlotBlock {
                     moSlotBlock.bay03.get(moSlotPosition.getRowInt()).putMOSlot(moSlotPosition.getTierInt(), moSlot);
                 }
             }
-            if (moSlotPosition.getBayInt() % 4 == 2) { //第一和二个小贝
+            if (moSlotPosition.getBayInt() % 4 == 2 || moSlotPosition.getBayInt() % 4 == 0) { //第一和二个小贝
                 if (moSlotBlock.bay01.get(moSlotPosition.getRowInt()) != null) {
                     moSlotBlock.bay01.get(moSlotPosition.getRowInt()).putMOSlot(moSlotPosition.getTierInt(), moSlot);
                 } else {
@@ -118,7 +118,7 @@ public class MOSlotBlock {
             moSlotStack.setTopTierNo(moSlotPosition.getTierInt() > topTierNo ? moSlotPosition.getTierInt() : topTierNo);
             moSlotStack.setBottomTierNo(moSlotPosition.getTierInt() < bottomTierNo ? moSlotPosition.getTierInt() : bottomTierNo);
         }
-        if (moSlotPosition.getBayInt() % 4 == 2) { //第一和二个小贝
+        if (moSlotPosition.getBayInt() % 4 == 2 || moSlotPosition.getBayInt() % 4 == 0) { //第一和二个小贝
             MOSlotStack moSlotStack01 = bay01.get(moSlotPosition.getRowInt());
             moSlotStack01.putMOSlot(moSlotPosition.getTierInt(), moSlot);
             int topTierNo = moSlotStack01.getTopTierNo();
@@ -146,7 +146,7 @@ public class MOSlotBlock {
         if (moSlotPosition.getBayInt() % 4 == 3) { //第二个小贝
             bay03.get(moSlotPosition.getRowInt()).getMOSlot(moSlotPosition.getTierInt()).setMoContainer(moContainer);
         }
-        if (moSlotPosition.getBayInt() % 4 == 2) { //第一和二个小贝
+        if (moSlotPosition.getBayInt() % 4 == 2 || moSlotPosition.getBayInt() % 4 == 0) { //第一和二个小贝
             bay01.get(moSlotPosition.getRowInt()).getMOSlot(moSlotPosition.getTierInt()).setMoContainer(moContainer);
             bay03.get(moSlotPosition.getRowInt()).getMOSlot(moSlotPosition.getTierInt()).setMoContainer(moContainer);
         }
@@ -167,7 +167,7 @@ public class MOSlotBlock {
                 moSlot = bay03.get(moSlotPosition.getRowInt()).getMOSlot(moSlotPosition.getTierInt());
             }
         }
-        if (moSlotPosition.getBayInt() % 4 == 2) { //大贝,取第一个小贝
+        if (moSlotPosition.getBayInt() % 4 == 2 || moSlotPosition.getBayInt() % 4 == 0) { //大贝,取第一个小贝
 //            System.out.println(moSlotPosition.getBayInt() + "-" + moSlotPosition.getRowInt() + "-" + moSlotPosition.getTierInt());
             if (bay01.get(moSlotPosition.getRowInt()) != null) {
                 moSlot = bay01.get(moSlotPosition.getRowInt()).getMOSlot(moSlotPosition.getTierInt());
@@ -281,7 +281,7 @@ public class MOSlotBlock {
 
         if (tierInt > 0) {
             tierInt = tierInt - 2;
-            if (bayInt % 4 == 2) {
+            if (bayInt % 4 == 2 || bayInt % 4 == 0) {
                 MOSlotPosition underPosition = new MOSlotPosition(bayInt, rowInt, tierInt);
                 moSlot = this.getMOSlot(underPosition);
                 if (moSlot == null) {
@@ -308,7 +308,7 @@ public class MOSlotBlock {
         if(this.tierNoListAsc.size() > 0) {
             if (tierInt < this.tierNoListAsc.get(tierNoListAsc.size()-1)) {
                 tierInt = tierInt + 2;
-                if (bayInt % 4 == 2) {
+                if (bayInt % 4 == 2 || bayInt % 4 == 0) {
                     MOSlotPosition upPosition = new MOSlotPosition(bayInt, rowInt, tierInt);
                     moSlot = this.getMOSlot(upPosition);
                     if (moSlot == null) {

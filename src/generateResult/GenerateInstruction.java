@@ -1,6 +1,7 @@
 package generateResult;
 
 import importDataInfo.MoveInfo;
+import importDataProcess.ExceptionData;
 
 import java.util.*;
 
@@ -10,30 +11,42 @@ import java.util.*;
  */
 public class GenerateInstruction {
 
-    public static List<MoveInfo> getWorkInstruction(List<MoveInfo> moveInfoList,
+    public static List<MoveInfo> getWorkInstruction(Long batchNum,
+                                                    List<MoveInfo> moveInfoList,
                                                     Date curInstructionTime,
                                                     Integer timeInterval) {
+        ExceptionData.exceptionMap.put(batchNum, "接口方法未如期执行异常。");
         List<MoveInfo> resultList = new ArrayList<>();
 
-        sortByStartTime(moveInfoList);
+        sortByStartTime(moveInfoList); //按计划作业开始时间排序（升序）
 
         MoveInfo firstMove = findFirstMove(curInstructionTime, moveInfoList);
         long firstST = firstMove.getWorkingStartTime().getTime();
 
+        if (timeInterval == null) { //间隔时间，默认是30分钟
+            timeInterval = 30;
+        }
+
+        boolean isRight = true;
+        String info = "";
         for (MoveInfo moveInfo : moveInfoList) {
             String status = moveInfo.getInStatus();
-            if ("done".equals(status)) {
-                continue;
-            } else {
+            if ("R".equals(status)) {
                 long startTime = moveInfo.getWorkingStartTime().getTime();
-                if (startTime <= firstST + timeInterval * 60 * 1000) {
+                if (startTime >= firstST && startTime <= firstST + timeInterval * 60 * 1000) {
                     if (!isUnderEmpty(moveInfo, moveInfoList) && isWorkFlowOk(moveInfo, moveInfoList)) {
                         resultList.add(moveInfo);
+                    } else {
+                        isRight = false;
+                        info += "指令编号为：" + moveInfo.getGkey() + "不可作业；";
                     }
-                } else {
-                    break;
                 }
             }
+        }
+        if (isRight) {
+            ExceptionData.exceptionMap.put(batchNum, "success! 成功返回可作业的所有指令。");
+        } else {
+            ExceptionData.exceptionMap.put(batchNum, "error! " + info);
         }
 
         return resultList;
@@ -46,7 +59,7 @@ public class GenerateInstruction {
         for (MoveInfo moveInfo1 : moveInfoList) {
             if (craneId.equals(moveInfo1.getBatchId())) {
                 if (moveInfo1.getMoveId() < moveId) {
-                    if ("?".equals(moveInfo1.getUnitId())) {
+                    if ("?".equals(moveInfo1.getUnitId()) || "".equals(moveInfo1.getInStatus())) {
                         isUnderEmpty = true;
                     }
                 }

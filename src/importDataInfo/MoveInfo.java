@@ -31,14 +31,14 @@ public class MoveInfo {
     private String inIsExchange; //指令是否可以交换
     private String inIsRepeal; //指令是否可以撤销
 
-    private Integer agvOrder; //装上AGV的顺序
+    private Integer carryOrder; //装上AGV的顺序
 
-    public Integer getAgvOrder() {
-        return agvOrder;
+    public Integer getCarryOrder() {
+        return carryOrder;
     }
 
-    public void setAgvOrder(Integer agvOrder) {
-        this.agvOrder = agvOrder;
+    public void setCarryOrder(Integer carryOrder) {
+        this.carryOrder = carryOrder;
     }
 
     public String getInStatus() {

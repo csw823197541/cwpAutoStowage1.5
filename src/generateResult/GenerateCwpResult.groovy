@@ -14,8 +14,12 @@ class GenerateCwpResult {
     public static DecimalFormat df = new DecimalFormat("#.00");
 
     public
-    static List<CwpResultInfo> getCwpResult(List<VoyageInfo> voyageInfoList, List<VesselStructureInfo> vesselStructureInfoList, List<CraneInfo> craneInfoList, List<PreStowageData> preStowageDataList) {
-
+    static List<CwpResultInfo> getCwpResult(Long batchNum,
+                                            List<VoyageInfo> voyageInfoList,
+                                            List<VesselStructureInfo> vesselStructureInfoList,
+                                            List<CraneInfo> craneInfoList,
+                                            List<PreStowageData> preStowageDataList) {
+        ExceptionData.exceptionMap.put(batchNum, "接口方法未如期执行异常。");
         List<CwpResultInfo> cwpResultInfoList = new ArrayList<>();
         List<HatchPositionInfo> hatchPositionInfoList = getHatchPositionInfoList(voyageInfoList, vesselStructureInfoList)
 
@@ -76,18 +80,24 @@ class GenerateCwpResult {
 //                }catch (Exception e) {
 //                    e.printStackTrace()
 //                }
-                if ("The crane resources is not enough".equals(cwpResultStr)) {
-                    cwpResultInfoList = null;
+
+                long voyageTime = voyageInfoList.get(0).getVOTPWKENTM().getTime() - voyageInfoList.get(0).getVOTPWKSTTM().getTime();
+                cwpResultInfoList = CwpResultInfoProcess.getCwpResultInfo(cwpResultStr, voyageInfoList, preStowageDataList);
+                int maxTime = 0;
+                for (CwpResultInfo cwpResultInfo : cwpResultInfoList) {
+                    if (maxTime < cwpResultInfo.getWORKINGENDTIME()) {
+                        maxTime = cwpResultInfo.getWORKINGENDTIME();
+                    }
+                }
+
+                if (maxTime * 1000 > voyageTime) { //桥机资源不够，不能按船期完成
+                    ExceptionData.exceptionMap.put(batchNum, "error! 桥机资源不够，cwp不能按船期完成。")
                 } else {
-//                    try{
-//                        FileUtil.writeToFile("toCwpData/cwpResult.txt", cwpResultStr)
-//                    }catch (Exception e) {
-//                        e.printStackTrace()
-//                    }
-                    cwpResultInfoList = CwpResultInfoProcess.getCwpResultInfo(cwpResultStr, voyageInfoList, preStowageDataList)
+                    ExceptionData.exceptionMap.put(batchNum, "success! cwp按船期完成。")
                 }
 //                cwpResultInfoList = CwpResultInfoProcess.getCwpResultInfo(cwpResultStr, voyageInfoList)
             } else {
+                ExceptionData.exceptionMap.put(batchNum, "error! cwp发现未知问题，无法返回结果。")
                 System.out.println("cwp算法没有返回结果！")
             }
         } else {

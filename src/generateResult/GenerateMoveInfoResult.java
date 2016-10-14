@@ -13,7 +13,10 @@ public class GenerateMoveInfoResult {
 
     public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public static List<MoveInfo> getMoveInfoResult(List<VoyageInfo> voyageInfoList, List<PreStowageData> preStowageDataList, List<CwpResultMoveInfo> cwpResultMoveInfoList, List<AutoStowResultInfo> autoStowResultInfoList) {
+    public static List<MoveInfo> getMoveInfoResult(List<VoyageInfo> voyageInfoList,
+                                                   List<PreStowageData> preStowageDataList,
+                                                   List<CwpResultMoveInfo> cwpResultMoveInfoList,
+                                                   List<AutoStowResultInfo> autoStowResultInfoList) {
         List<MoveInfo> moveInfoList = new ArrayList<>();
 
         try{
@@ -112,6 +115,7 @@ public class GenerateMoveInfoResult {
                             }
                         }
                         moveInfo.setVoyId(voyId);
+//                        moveInfo.setInStatus("R");
                         moveInfoList.add(moveInfo);
                         lastStartTime = startTime;
                     }

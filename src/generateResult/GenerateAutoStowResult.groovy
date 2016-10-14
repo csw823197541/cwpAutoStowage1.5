@@ -4,6 +4,7 @@ import autoStow.CallAutoStow
 import groovy.json.JsonSlurper
 import importDataInfo.*
 import importDataProcess.AutoStowInputProcess
+import importDataProcess.ExceptionData
 
 /**
  * Created by leko on 2016/1/22.
@@ -12,7 +13,13 @@ public class GenerateAutoStowResult {
 
     //调用自动配载
     public
-    static List<AutoStowResultInfo> getAutoStowResult(List<GroupInfo> groupInfoList, List<ContainerInfo> containerInfoList, List<ContainerAreaInfo> containerAreaInfoList, List<PreStowageData> preStowageDataList, List<CwpResultMoveInfo> cwpResultMoveInfoList) {
+    static List<AutoStowResultInfo> getAutoStowResult(Long batchNum,
+                                                      List<GroupInfo> groupInfoList,
+                                                      List<ContainerInfo> containerInfoList,
+                                                      List<ContainerAreaInfo> containerAreaInfoList,
+                                                      List<PreStowageData> preStowageDataList,
+                                                      List<CwpResultMoveInfo> cwpResultMoveInfoList) {
+        ExceptionData.exceptionMap.put(batchNum, "接口方法未如期执行异常。");
         List<AutoStowResultInfo> autoStowResultInfoList = new ArrayList<AutoStowResultInfo>();
 
         //处理在场箱信息
@@ -53,13 +60,18 @@ public class GenerateAutoStowResult {
 
             System.out.println("自动配载算法返回的结果：" + autoStowStr);
             if (autoStowStr != null) {
-                if(!"loadDataError".equals(autoStowStr)) {
+                if(!autoStowStr.startsWith("loadDataError")) {
                     autoStowResultInfoList = getAutoStowResult(autoStowStr, preStowageDataList, containerInfoList);
+                    ExceptionData.exceptionMap.put(batchNum, "success! 自动配载算法成功返回结果。")
+                } else {
+                    ExceptionData.exceptionMap.put(batchNum, "error! 算法检查输入属性组数据时，发现如下异常：" + autoStowStr);
                 }
             } else {
+                ExceptionData.exceptionMap.put(batchNum, "error! 自动配载算法发现未知异常，没有返回结果。")
                 System.out.println("自动配载算法没有返回结果！");
             }
         } else {
+            ExceptionData.exceptionMap.put(batchNum, "error! 自动配载算法需要的4个参数信息中有空的，不能调用算法。")
             System.out.println("自动配载算法需要的4个参数信息中有空的，不能调用算法！");
         }
         return autoStowResultInfoList;
