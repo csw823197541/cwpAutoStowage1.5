@@ -23,7 +23,8 @@ import java.util.*;
  */
 public class GenerateMoveOrder {
 
-    public static List<PreStowageData> getMoveOrderAndWorkFlow(Long batchNum, List<PreStowageData> preStowageDataList,
+    public static List<PreStowageData> getMoveOrderAndWorkFlow(Long batchNum,
+                                                               List<PreStowageData> preStowageDataList,
                                                                List<VesselStructureInfo> vesselStructureInfoList,
                                                                Map<String, List<Integer>> workFlowMap) {
         ExceptionData.exceptionMap.put(batchNum, "接口方法未如期执行异常。");
@@ -216,7 +217,7 @@ public class GenerateMoveOrder {
         if (isRight) {
             ExceptionData.exceptionMap.put(batchNum, "success! 生成作业工艺和MoveOrder方法未发现数据异常。");
         } else {
-            ExceptionData.exceptionMap.put(batchNum, "error! 舱号为：" + errorHatchStr + "，发现数据异常。");
+            ExceptionData.exceptionMap.put(batchNum, "error! 舱号为：" + errorHatchStr + " 发现数据异常。");
         }
 
         return preStowageDataListResult;
