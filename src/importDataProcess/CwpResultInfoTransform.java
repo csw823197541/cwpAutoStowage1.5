@@ -15,7 +15,7 @@ public class CwpResultInfoTransform {
         List<CwpResultInfo> resultInfoList = new ArrayList<>();
 
         Map<String, Map<Integer, CwpResultInfo>> allMap = new HashMap<>();
-        ExceptionData.exceptionMap.put(batchNum, "接口方法未执行异常。");
+        ExceptionData.exceptionMap.put(batchNum, "接口方法未执行。");
         boolean isRight = true;
         String info = "";
         try{
@@ -81,10 +81,10 @@ public class CwpResultInfoTransform {
             resultInfoList = getHatchSeq(resultInfoList);   //对舱进行编顺序号
         } catch (Exception e) {
             isRight = false;
-            info += "接口方法发生传入的cwp数据有为null异常。";
+            info += "生成cwp作业块接口方法发生传入的cwp数据有为null异常。";
         }
         if (isRight) {
-            ExceptionData.exceptionMap.put(batchNum, "success! 接口方法没有发生异常。");
+            ExceptionData.exceptionMap.put(batchNum, "success! 生成cwp作业块接口方法没有发生异常。");
         } else {
             ExceptionData.exceptionMap.put(batchNum, "error! " + info);
         }

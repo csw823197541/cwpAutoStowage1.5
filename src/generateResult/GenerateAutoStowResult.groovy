@@ -19,17 +19,17 @@ public class GenerateAutoStowResult {
                                                       List<ContainerAreaInfo> containerAreaInfoList,
                                                       List<PreStowageData> preStowageDataList,
                                                       List<CwpResultMoveInfo> cwpResultMoveInfoList) {
-        ExceptionData.exceptionMap.put(batchNum, "接口方法未如期执行异常。");
+        ExceptionData.exceptionMap.put(batchNum, "接口没有执行。");
         List<AutoStowResultInfo> autoStowResultInfoList = new ArrayList<AutoStowResultInfo>();
 
         //处理在场箱信息
-        String containerStr = AutoStowInputProcess.getContainerJsonStr(containerInfoList);
+        String containerStr = AutoStowInputProcess.getContainerJsonStr(batchNum, containerInfoList);
 
         //处理箱区信息
-        String containerAreaStr = AutoStowInputProcess.getContainerAreaJsonStr(containerAreaInfoList);
+        String containerAreaStr = AutoStowInputProcess.getContainerAreaJsonStr(batchNum, containerAreaInfoList);
 
         //处理预配信息
-        String preStowageStr = AutoStowInputProcess.getPreStowageJsonStr(preStowageDataList);
+        String preStowageStr = AutoStowInputProcess.getPreStowageJsonStr(batchNum, preStowageDataList);
 
 //        try {//将自动配载要用的结果写在文件里，让算法去读这个文件
 //            FileUtil.writeToFile("toAutoStowJsonData/Container.txt", containerStr);
@@ -39,7 +39,7 @@ public class GenerateAutoStowResult {
 //            e.printStackTrace();
 //        }
         //处理cwp输出信息
-        String cwpResultStr = AutoStowInputProcess.getCwpResultJsonStr(cwpResultMoveInfoList);
+        String cwpResultStr = AutoStowInputProcess.getCwpResultJsonStr(batchNum, cwpResultMoveInfoList);
 
 //        try {//将自动配载要用的结果写在文件里
 //            FileUtil.writeToFile("toAutoStowJsonData/CwpOutput.txt", cwpResultStr);
@@ -61,7 +61,7 @@ public class GenerateAutoStowResult {
             System.out.println("自动配载算法返回的结果：" + autoStowStr);
             if (autoStowStr != null) {
                 if(!autoStowStr.startsWith("loadDataError")) {
-                    autoStowResultInfoList = getAutoStowResult(autoStowStr, preStowageDataList, containerInfoList);
+                    autoStowResultInfoList = getAutoStowResult(batchNum, autoStowStr, preStowageDataList, containerInfoList);
                     ExceptionData.exceptionMap.put(batchNum, "success! 自动配载算法成功返回结果。")
                 } else {
                     ExceptionData.exceptionMap.put(batchNum, "error! 算法检查输入属性组数据时，发现如下异常：" + autoStowStr);
@@ -79,14 +79,17 @@ public class GenerateAutoStowResult {
 
 
     public
-    static List<AutoStowResultInfo> getAutoStowResult(String autoStowStr, List<PreStowageData> preStowageDataList, List<ContainerInfo> containerInfoList) {
+    static List<AutoStowResultInfo> getAutoStowResult(Long batchNum, String autoStowStr, List<PreStowageData> preStowageDataList, List<ContainerInfo> containerInfoList) {
 
         List<AutoStowResultInfo> autoStowResultInfoList = new ArrayList<>();
         boolean isError = false;
 
         try {
 
-            Long voyId = containerInfoList.get(0).getIYCVOYID().longValue();//根据在场箱得到航次？
+            Map<String, ContainerInfo> containerInfoMap = new HashMap<>();
+            for (ContainerInfo containerInfo : containerInfoList) {
+                containerInfoMap.put(containerInfo.getContainerId(), containerInfo);
+            }
 
             //将预配信息进行处理，根据船箱位得到卸船的箱号信息
             Map<String, PreStowageData> preStowageDataMapL = new HashMap<>();
@@ -117,9 +120,14 @@ public class GenerateAutoStowResult {
                 if (preStowageDataMapL.get(vesselPosition) != null) {
                     size = preStowageDataMapL.get(vesselPosition).getSIZE();
                 }
+                String containerNum = null;
+                Long voyId = null;
                 if (containerID == null) {
                     containerID = "?";
                     yardLoc = "?";
+                } else {
+                    containerNum = containerInfoMap.get(containerID).getIYCCNTRNO();
+                    voyId = containerInfoMap.get(containerID).getIYCVOYID();
                 }
                 if(!yardLoc.startsWith("unStowed")) {
 //                    yardLoc = yardLoc.split("%")[0] + "" + yardLoc.split("%")[1] + "" + yardLoc.split("%")[2] + "" + yardLoc.split("%")[3];
@@ -127,7 +135,8 @@ public class GenerateAutoStowResult {
                 }
                 autoStowResultInfo.setAreaPosition(yardLoc);
                 autoStowResultInfo.setSize(size);
-                autoStowResultInfo.setUnitID(containerID);
+                autoStowResultInfo.setContainerId(containerID);
+                autoStowResultInfo.setContainerNum(containerNum)
                 autoStowResultInfo.setVesselPosition(vesselPosition);
                 autoStowResultInfo.setVoyId(voyId);
                 autoStowResultInfo.setUnStowedReason(unStowedReason);
@@ -140,6 +149,7 @@ public class GenerateAutoStowResult {
         }
         if (isError) {
             System.out.println("自动配载返回结果数据解析失败！")
+            ExceptionData.exceptionMap.put(batchNum, "自动配载返回结果数据解析时，发现json数据异常！")
             return null;
         } else {
             System.out.println("自动配载返回结果数据解析成功！")

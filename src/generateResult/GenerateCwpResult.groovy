@@ -19,15 +19,11 @@ class GenerateCwpResult {
                                             List<VesselStructureInfo> vesselStructureInfoList,
                                             List<CraneInfo> craneInfoList,
                                             List<PreStowageData> preStowageDataList) {
-        ExceptionData.exceptionMap.put(batchNum, "接口方法未如期执行异常。");
+        ExceptionData.exceptionMap.put(batchNum, "接口方法没有执行。");
         List<CwpResultInfo> cwpResultInfoList = new ArrayList<>();
         List<HatchPositionInfo> hatchPositionInfoList = getHatchPositionInfoList(voyageInfoList, vesselStructureInfoList)
 
-        //计算moveCount和对预配图编属性组
-        List<PreStowageData> preStowageDataList1 = GenerateMoveCountAndGroupId.getMoveCountAndGroupId(preStowageDataList)
-
-        Map<String, Integer> moveCountQuery = ImportData.moveCountQuery
-        List<HatchInfo> hatchInfoList = getHatchInfoList(voyageInfoList, hatchPositionInfoList, moveCountQuery);
+        List<HatchInfo> hatchInfoList = getHatchInfoList(voyageInfoList, hatchPositionInfoList, preStowageDataList);
 
         List<WorkMoveInfo> workMoveInfoList = getWorkMoveInfoList(preStowageDataList)
 
@@ -101,6 +97,7 @@ class GenerateCwpResult {
                 System.out.println("cwp算法没有返回结果！")
             }
         } else {
+            ExceptionData.exceptionMap.put(batchNum, "error! cwp算法需要的3个参数信息中有为空的，不能调用算法。")
             System.out.println("cwp算法需要的3个参数信息中有空的，不能调用算法！")
         }
         return cwpResultInfoList;
@@ -114,10 +111,46 @@ class GenerateCwpResult {
      * @return
      */
     public
-    static List<HatchInfo> getHatchInfoList(List<VoyageInfo> voyageInfoList, List<HatchPositionInfo> hatchPositionInfoList, Map<String, Integer> moveCountQuery) {
+    static List<HatchInfo> getHatchInfoList(List<VoyageInfo> voyageInfoList, List<HatchPositionInfo> hatchPositionInfoList, List<PreStowageData> preStowageDataList) {
         System.out.println("开始生成船舱信息：");
         List<HatchInfo> hatchInfoList = new ArrayList<>()
         try {
+
+            Map<String, Integer> moveCountQuery = new HashMap<>()
+            //将数据放在不同的舱位里
+            List<String> VHTIDs = new ArrayList<>()//存放舱位ID
+            Map<String, List<PreStowageData>> stringListMap = new HashMap<>()//放在不同的舱位的数据
+            for(PreStowageData preStowageData : preStowageDataList) {
+                if(!VHTIDs.contains(preStowageData.getVHTID())) {
+                    VHTIDs.add(preStowageData.getVHTID())
+                }
+            }
+            Collections.sort(VHTIDs)
+            println "舱位数：" + VHTIDs.size()
+            for(String str : VHTIDs) {//
+                List<PreStowageData> dataList1 = new ArrayList<>()
+                for(PreStowageData preStowageData : preStowageDataList) {
+                    if(str.equals(preStowageData.getVHTID())) {
+                        dataList1.add(preStowageData)
+                    }
+                }
+                stringListMap.put(str, dataList1)
+            }
+            int t = 0
+            for(String str : VHTIDs) {
+                List<PreStowageData> dataList = stringListMap.get(str)
+                List<Integer> orders = new ArrayList<>()
+                for(PreStowageData preStowageData1 : dataList) {
+                    if(!orders.contains(preStowageData1.getMOVEORDER())) {
+                        orders.add(preStowageData1.getMOVEORDER())
+                    }
+                }
+                println "舱id:"+str+"-moveCount数："+ orders.size()
+                t += orders.size()
+                moveCountQuery.put(str, orders.size())
+            }
+            println "总movecount数：" + t
+
             HatchInfo newHatchInfo;
             Date workingStartTime = voyageInfoList.get(0).getVOTPWKSTTM();
             Date workingEndTime = voyageInfoList.get(0).getVOTPWKENTM();

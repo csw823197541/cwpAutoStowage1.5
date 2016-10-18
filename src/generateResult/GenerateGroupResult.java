@@ -24,7 +24,7 @@ public class GenerateGroupResult {
         Set<String> cTypeSet = new HashSet<String>();  //包含箱型类型
         Set<String> cSizeSet = new HashSet<String>();   //包含尺寸类型
 
-        ExceptionData.exceptionMap.put(batchNum, "接口方法未执行异常。");
+        ExceptionData.exceptionMap.put(batchNum, "接口方法未执行。");
         boolean isRight = true;
         String info = "";
         try{
@@ -57,10 +57,10 @@ public class GenerateGroupResult {
             }
         } catch (Exception e) {
             isRight = false;
-            info += "接口方法发生在场箱数据为null异常。";
+            info += "生成属性组接口方法发生在场箱数据为null异常。";
         }
         if (isRight) {
-            ExceptionData.exceptionMap.put(batchNum, "success! 接口方法没有发生异常。");
+            ExceptionData.exceptionMap.put(batchNum, "success! 生成属性组接口方法没有发生异常。");
         } else {
             ExceptionData.exceptionMap.put(batchNum, "error! " + info);
         }

@@ -21,7 +21,7 @@ public class GenerateBayPositionQuery {
             List<VesselStructureInfo> vesselStructureInfoList) {
         Map<String, Double> bayPositionMap = new HashMap<>();
 
-        ExceptionData.exceptionMap.put(batchNum, "接口方法未执行异常。");
+        ExceptionData.exceptionMap.put(batchNum, "接口方法未执行。");
         boolean isRight = true;
         String info = "";
         try{
@@ -106,10 +106,10 @@ public class GenerateBayPositionQuery {
             }
         } catch (Exception e) {
             isRight = false;
-            info += "接口方法发生航次或船舶结构数据为null异常。";
+            info += "生成倍位绝对位置坐标接口方法发生航次或船舶结构数据为null异常。";
         }
         if (isRight) {
-            ExceptionData.exceptionMap.put(batchNum, "success! 接口方法没有发生异常。");
+            ExceptionData.exceptionMap.put(batchNum, "success! 生成倍位绝对位置坐标接口方法没有发生异常。");
         } else {
             ExceptionData.exceptionMap.put(batchNum, "error! " + info);
         }

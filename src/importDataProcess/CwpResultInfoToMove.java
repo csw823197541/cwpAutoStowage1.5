@@ -17,7 +17,7 @@ public class CwpResultInfoToMove {
             List<CwpResultInfo> cwpResultInfoListIn,
             List<PreStowageData> preStowageDataList) {
         List<CwpResultMoveInfo> resultInfoList = new ArrayList<>();
-        ExceptionData.exceptionMap.put(batchNum, "接口方法未执行异常。");
+        ExceptionData.exceptionMap.put(batchNum, "接口方法未执行。");
         boolean isRight = true;
         String info = "";
         try{
@@ -110,35 +110,15 @@ public class CwpResultInfoToMove {
             }
         } catch (Exception e) {
             isRight = false;
-            info += "接口方法发生cwp结果或者预配数据为null异常。";
+            info += "生成cwp单箱数据接口方法发生cwp结果或者预配数据为null异常。";
         }
         if (isRight) {
-            ExceptionData.exceptionMap.put(batchNum, "success! 接口方法没有发生异常。");
+            ExceptionData.exceptionMap.put(batchNum, "success! 生成cwp单箱数据接口方法没有发生异常。");
         } else {
             ExceptionData.exceptionMap.put(batchNum, "error! " + info);
         }
 
         return resultInfoList;
 
-    }
-
-    public static List<CwpResultMoveInfo> getOneMoveInfo(List<CwpResultMoveInfo> cwpResultMoveInfoList) {
-        List<CwpResultMoveInfo> resultMoveInfoList = new ArrayList<>();
-
-        List<String> hatchIdMoveOrder = new ArrayList<>();
-        try{
-            for(CwpResultMoveInfo cwpResultMoveInfo : cwpResultMoveInfoList) {
-                String hatchId = cwpResultMoveInfo.getHATCHID();
-                int moveOrder = cwpResultMoveInfo.getMoveOrder();
-                String hm = hatchId + "" + moveOrder;
-                if(!hatchIdMoveOrder.contains(hm)) {
-                    hatchIdMoveOrder.add(hm);
-                    resultMoveInfoList.add(cwpResultMoveInfo);
-                }
-            }
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return resultMoveInfoList;
     }
 }

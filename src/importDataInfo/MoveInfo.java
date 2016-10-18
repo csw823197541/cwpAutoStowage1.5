@@ -9,76 +9,82 @@ import java.util.List;
  * Created by leko on 2016/1/22.
  */
 public class MoveInfo {
-    private String gkey;                    //唯一编号
-    private Integer WORKINGSTARTTIME;     //开始时间
-    private Integer WORKINGENDTIME;         //结束时间
-    private String batchId;                 //桥机号
-    private int moveId;                     //桥机作业顺序moveId
+
+    private String vpcCntrId;                    //唯一编号
+    private String craneNo;                 //桥机号
+    private Integer moveNum;                     //桥机作业顺序号
     private String moveKind;                //装卸标志
-    private String unitId;                  //箱编号
-    private String unitLength;              //箱尺寸
-    private String exFromPosition;      //计划提箱位置
-    private String exToPosition;       //计划放箱位置
+    private String containerId;                  //箱Id号
+    private String size;              //箱尺寸
+    private String areaPosition;      //计划提箱位置, 场
+    private String vesselPosition;       //计划放箱位置, 船箱位：倍.排.层
 
-    private String vesselPosition;   //船箱位：倍.排.层
-    private Date workingStartTime;    //开始时间
-    private Date workingEndTime;    //结束时间
+    private Date workingStartTime;    //cwp计划开始时间
+    private Date workingEndTime;    //cwp计划结束时间
 
-    private String moveType;    //作业工艺
-    private Long voyId; //航次Id，艘次
+    private String workFlow;    //作业工艺
+    private Long voyId; //航次Id，进口航次或出口航次
 
-    private String inStatus; //指令状态
-    private String inIsExchange; //指令是否可以交换
-    private String inIsRepeal; //指令是否可以撤销
+    private String workStatus; //指令状态
+    private String workIsExchange; //指令是否可以交换
+    private String workIsRepeal; //指令是否可以撤销
 
     private Integer carryOrder; //装上AGV的顺序
 
-    public Integer getCarryOrder() {
-        return carryOrder;
+    public String getVpcCntrId() {
+        return vpcCntrId;
     }
 
-    public void setCarryOrder(Integer carryOrder) {
-        this.carryOrder = carryOrder;
+    public void setVpcCntrId(String vpcCntrId) {
+        this.vpcCntrId = vpcCntrId;
     }
 
-    public String getInStatus() {
-        return inStatus;
+    public String getCraneNo() {
+        return craneNo;
     }
 
-    public void setInStatus(String inStatus) {
-        this.inStatus = inStatus;
+    public void setCraneNo(String craneNo) {
+        this.craneNo = craneNo;
     }
 
-    public String getInIsExchange() {
-        return inIsExchange;
+    public Integer getMoveNum() {
+        return moveNum;
     }
 
-    public void setInIsExchange(String inIsExchange) {
-        this.inIsExchange = inIsExchange;
+    public void setMoveNum(Integer moveNum) {
+        this.moveNum = moveNum;
     }
 
-    public String getInIsRepeal() {
-        return inIsRepeal;
+    public String getMoveKind() {
+        return moveKind;
     }
 
-    public void setInIsRepeal(String inIsRepeal) {
-        this.inIsRepeal = inIsRepeal;
+    public void setMoveKind(String moveKind) {
+        this.moveKind = moveKind;
     }
 
-    public Long getVoyId() {
-        return voyId;
+    public String getContainerId() {
+        return containerId;
     }
 
-    public void setVoyId(Long voyId) {
-        this.voyId = voyId;
+    public void setContainerId(String containerId) {
+        this.containerId = containerId;
     }
 
-    public String getMoveType() {
-        return moveType;
+    public String getSize() {
+        return size;
     }
 
-    public void setMoveType(String moveType) {
-        this.moveType = moveType;
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getAreaPosition() {
+        return areaPosition;
+    }
+
+    public void setAreaPosition(String areaPosition) {
+        this.areaPosition = areaPosition;
     }
 
     public String getVesselPosition() {
@@ -105,94 +111,51 @@ public class MoveInfo {
         this.workingEndTime = workingEndTime;
     }
 
-    //获取属性列表
-    static public List getFiledsInfo() {
-        Field[] fields = MoveInfo.class.getDeclaredFields();
-        String[] fieldNames = new String[fields.length];
-        List list = new ArrayList();
-        for (int i = 0; i < fields.length; i++) {
-            list.add(fields[i].getName());
-        }
-        return list;
+    public String getWorkFlow() {
+        return workFlow;
     }
 
-    public String getGkey() {
-        return gkey;
+    public void setWorkFlow(String workFlow) {
+        this.workFlow = workFlow;
     }
 
-    public void setGkey(String gkey) {
-        this.gkey = gkey;
+    public Long getVoyId() {
+        return voyId;
     }
 
-    public Integer getWORKINGSTARTTIME() {
-        return WORKINGSTARTTIME;
+    public void setVoyId(Long voyId) {
+        this.voyId = voyId;
     }
 
-    public void setWORKINGSTARTTIME(Integer WORKINGSTARTTIME) {
-        this.WORKINGSTARTTIME = WORKINGSTARTTIME;
+    public String getWorkStatus() {
+        return workStatus;
     }
 
-    public String getBatchId() {
-        return batchId;
+    public void setWorkStatus(String workStatus) {
+        this.workStatus = workStatus;
     }
 
-    public void setBatchId(String batchId) {
-        this.batchId = batchId;
+    public String getWorkIsExchange() {
+        return workIsExchange;
     }
 
-    public int getMoveId() {
-        return moveId;
+    public void setWorkIsExchange(String workIsExchange) {
+        this.workIsExchange = workIsExchange;
     }
 
-    public void setMoveId(int moveId) {
-        this.moveId = moveId;
+    public String getWorkIsRepeal() {
+        return workIsRepeal;
     }
 
-    public String getMoveKind() {
-        return moveKind;
+    public void setWorkIsRepeal(String workIsRepeal) {
+        this.workIsRepeal = workIsRepeal;
     }
 
-    public void setMoveKind(String moveKind) {
-        this.moveKind = moveKind;
+    public Integer getCarryOrder() {
+        return carryOrder;
     }
 
-    public String getUnitId() {
-        return unitId;
-    }
-
-    public void setUnitId(String unitId) {
-        this.unitId = unitId;
-    }
-
-    public String getUnitLength() {
-        return unitLength;
-    }
-
-    public void setUnitLength(String unitLength) {
-        this.unitLength = unitLength;
-    }
-
-    public String getExFromPosition() {
-        return exFromPosition;
-    }
-
-    public void setExFromPosition(String exFromPosition) {
-        this.exFromPosition = exFromPosition;
-    }
-
-    public String getExToPosition() {
-        return exToPosition;
-    }
-
-    public void setExToPosition(String exToPosition) {
-        this.exToPosition = exToPosition;
-    }
-
-    public Integer getWORKINGENDTIME() {
-        return WORKINGENDTIME;
-    }
-
-    public void setWORKINGENDTIME(Integer WORKINGENDTIME) {
-        this.WORKINGENDTIME = WORKINGENDTIME;
+    public void setCarryOrder(Integer carryOrder) {
+        this.carryOrder = carryOrder;
     }
 }

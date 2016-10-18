@@ -27,7 +27,7 @@ public class GenerateMoveOrder {
                                                                List<PreStowageData> preStowageDataList,
                                                                List<VesselStructureInfo> vesselStructureInfoList,
                                                                Map<String, List<Integer>> workFlowMap) {
-        ExceptionData.exceptionMap.put(batchNum, "接口方法未如期执行异常。");
+        ExceptionData.exceptionMap.put(batchNum, "编MoveOrder和作业工艺方法没有执行。");
         List<PreStowageData> preStowageDataListResult = new ArrayList<>();
 
         List<PreStowageData> preStowageDataListNew = new ArrayList<>();
@@ -152,6 +152,14 @@ public class GenerateMoveOrder {
                             new WorkType(1, "4"), new WorkType(1, "2")};
                     workTypesL = new WorkType[]{new WorkType(1, "2"), new WorkType(1, "4"),
                             new WorkType(1, "4"), new WorkType(1, "2")};
+                } else if (type1_20_40 == 1 && type2_20 == 0 && type2_40 == 1) {
+                    PTSeq.add(new PT20Single());
+                    PTSeq.add(new PT40Single());
+                    PTSeq.add(new PT40Dual());
+                    workTypesD = new WorkType[]{new WorkType(1, "2"), new WorkType(1, "4"),
+                            new WorkType(2, "4"), new WorkType(1, "4"), new WorkType(1, "2")};
+                    workTypesL = new WorkType[]{new WorkType(1, "2"), new WorkType(1, "4"),
+                            new WorkType(2, "4"), new WorkType(1, "4"), new WorkType(1, "2")};
                 } else { //没有指定作业工艺，按单吊、双箱吊、双吊具都有处理
                     PTSeq.add(new PT20Single());
                     PTSeq.add(new PT40Single());

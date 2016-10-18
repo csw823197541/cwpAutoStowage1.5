@@ -15,7 +15,7 @@ public class GenerateInstruction {
                                                     List<MoveInfo> moveInfoList,
                                                     Date curInstructionTime,
                                                     Integer timeInterval) {
-        ExceptionData.exceptionMap.put(batchNum, "接口方法未如期执行异常。");
+        ExceptionData.exceptionMap.put(batchNum, "接口方法没有执行。");
         List<MoveInfo> resultList = new ArrayList<>();
 
         sortByStartTime(moveInfoList); //按计划作业开始时间排序（升序）
@@ -30,7 +30,7 @@ public class GenerateInstruction {
         boolean isRight = true;
         String info = "";
         for (MoveInfo moveInfo : moveInfoList) {
-            String status = moveInfo.getInStatus();
+            String status = moveInfo.getWorkStatus();
             if ("R".equals(status)) {
                 long startTime = moveInfo.getWorkingStartTime().getTime();
                 if (startTime >= firstST && startTime <= firstST + timeInterval * 60 * 1000) {
@@ -38,7 +38,7 @@ public class GenerateInstruction {
                         resultList.add(moveInfo);
                     } else {
                         isRight = false;
-                        info += "指令编号为：" + moveInfo.getGkey() + "不可作业；";
+                        info += "指令编号为：" + moveInfo.getVpcCntrId() + "不可作业；";
                     }
                 }
             }
@@ -52,14 +52,16 @@ public class GenerateInstruction {
         return resultList;
     }
 
+
+
     private static boolean isUnderEmpty(MoveInfo moveInfo, List<MoveInfo> moveInfoList) {
         boolean isUnderEmpty = false;
-        String craneId = moveInfo.getBatchId();
-        Integer moveId = moveInfo.getMoveId();
+        String craneId = moveInfo.getCraneNo();
+        Integer moveNum = moveInfo.getMoveNum();
         for (MoveInfo moveInfo1 : moveInfoList) {
-            if (craneId.equals(moveInfo1.getBatchId())) {
-                if (moveInfo1.getMoveId() < moveId) {
-                    if ("?".equals(moveInfo1.getUnitId()) || "".equals(moveInfo1.getInStatus())) {
+            if (craneId.equals(moveInfo1.getCraneNo())) {
+                if (moveInfo1.getMoveNum() < moveNum) {
+                    if ("?".equals(moveInfo1.getContainerId()) || "".equals(moveInfo1.getWorkStatus())) {
                         isUnderEmpty = true;
                     }
                 }
@@ -70,16 +72,16 @@ public class GenerateInstruction {
 
     private static boolean isWorkFlowOk(MoveInfo moveInfo, List<MoveInfo> moveInfoList) {
         boolean isWorkFlowOk = true;
-        String craneId = moveInfo.getBatchId();
-        Integer moveId = moveInfo.getMoveId();
-        String workFlow = moveInfo.getMoveType();
+        String craneId = moveInfo.getCraneNo();
+        Integer moveNum = moveInfo.getMoveNum();
+        String workFlow = moveInfo.getWorkFlow();
         String LD = moveInfo.getMoveKind();
         if ("L".equals(LD)) {
             if ("2".equals(workFlow) || "3".equals(workFlow)) {
                 int containerNum = 0;
                 for (MoveInfo moveInfo1 : moveInfoList) {
-                    if (craneId.equals(moveInfo1.getBatchId()) && moveId == moveInfo1.getMoveId()) {
-                        if (!"?".equals(moveInfo1.getUnitId())) {
+                    if (craneId.equals(moveInfo1.getCraneNo()) && moveNum == moveInfo1.getMoveNum()) {
+                        if (!"?".equals(moveInfo1.getContainerId())) {
                             containerNum++;
                         }
                     }

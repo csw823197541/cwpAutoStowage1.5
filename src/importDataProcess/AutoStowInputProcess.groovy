@@ -21,7 +21,7 @@ class AutoStowInputProcess {
      * @param containerInfoList
      * @return
      */
-    public static String getContainerJsonStr(List<ContainerInfo> containerInfoList) {
+    public static String getContainerJsonStr(Long batchNum, List<ContainerInfo> containerInfoList) {
 
         boolean isError = false;
         String result = null
@@ -33,7 +33,7 @@ class AutoStowInputProcess {
                 containerInfoList.each {it->
                     if(it.IYCPLANFG.equals("Y")) {
                         Map<String, Object> map = new HashMap<String, Object>()
-                        map.put("IYCCNTRNO", it.IYCCNTRNO)
+                        map.put("IYCCNTRNO", it.containerId)
                         map.put("IYCCNTRAREAID", it.IYCCNTRAREAID)
                         map.put("IYCVOYID", it.IYCVOYID)
                         map.put("IYCCTYPECD", it.IYCCTYPECD)
@@ -62,6 +62,7 @@ class AutoStowInputProcess {
         }
         if(isError) {
             System.out.println("生成在场箱信息json格式失败！")
+            ExceptionData.exceptionMap.put(batchNum, "生成在场箱信息json格式时，发现数据异常！")
             return null;
         }else {
             System.out.println("生成在场箱信息json格式成功！")
@@ -74,7 +75,7 @@ class AutoStowInputProcess {
      * @param containerAreaInfoList
      * @return
      */
-    public static String getContainerAreaJsonStr(List<ContainerAreaInfo> containerAreaInfoList) {
+    public static String getContainerAreaJsonStr(Long batchNum, List<ContainerAreaInfo> containerAreaInfoList) {
 
         boolean isError = false;
         String result = null
@@ -118,6 +119,7 @@ class AutoStowInputProcess {
         }
         if(isError) {
             System.out.println("生成箱区信息json格式失败！")
+            ExceptionData.exceptionMap.put(batchNum, "生成箱区信息json格式时，发现数据异常！")
             return null;
         }else {
             System.out.println("生成箱区信息json格式成功！")
@@ -130,7 +132,7 @@ class AutoStowInputProcess {
      * @param preStowageDataList
      * @return
      */
-    public static String getPreStowageJsonStr(List<PreStowageData> preStowageDataList) {
+    public static String getPreStowageJsonStr(Long batchNum, List<PreStowageData> preStowageDataList) {
 
         boolean isError = false;
         String result = null
@@ -166,6 +168,7 @@ class AutoStowInputProcess {
         }
         if(isError) {
             System.out.println("生成预配信息json格式失败！")
+            ExceptionData.exceptionMap.put(batchNum, "生成预配信息json格式时，发现数据异常！")
             return null;
         }else {
             System.out.println("生成预配信息json格式成功！")
@@ -178,7 +181,7 @@ class AutoStowInputProcess {
      * @param cwpResultMoveInfoList
      * @return
      */
-    public static String getCwpResultJsonStr(List<CwpResultMoveInfo> cwpResultMoveInfoList) {
+    public static String getCwpResultJsonStr(Long batchNum, List<CwpResultMoveInfo> cwpResultMoveInfoList) {
 
         boolean isError = false;
         String result = null
@@ -215,6 +218,7 @@ class AutoStowInputProcess {
         }
         if(isError) {
             System.out.println("生成cwp结果信息json格式失败！")
+            ExceptionData.exceptionMap.put(batchNum, "生成cwp结果信息json格式时，发现数据异常！")
             return null;
         }else {
             System.out.println("生成cwp结果信息json格式成功！")

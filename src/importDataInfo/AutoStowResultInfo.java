@@ -4,12 +4,30 @@ package importDataInfo;
  * Created by leko on 2016/1/22.
  */
 public class AutoStowResultInfo {
-    private String unitID;       //箱号
+
+    private String containerId; //箱Id
+    private String containerNum; //箱号
     private String vesselPosition;   //船上位置
     private String areaPosition;     //箱区位置
     private String size;        //尺寸
     private Long voyId;    //艘次信息
     private String unStowedReason;  //未配载原因
+
+    public String getContainerId() {
+        return containerId;
+    }
+
+    public void setContainerId(String containerId) {
+        this.containerId = containerId;
+    }
+
+    public String getContainerNum() {
+        return containerNum;
+    }
+
+    public void setContainerNum(String containerNum) {
+        this.containerNum = containerNum;
+    }
 
     public String getUnStowedReason() {
         return unStowedReason;
@@ -25,14 +43,6 @@ public class AutoStowResultInfo {
 
     public void setVoyId(Long voyId) {
         this.voyId = voyId;
-    }
-
-    public String getUnitID() {
-        return unitID;
-    }
-
-    public void setUnitID(String unitID) {
-        this.unitID = unitID;
     }
 
     public String getVesselPosition() {

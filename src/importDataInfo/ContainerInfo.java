@@ -4,7 +4,8 @@ package importDataInfo;
  * Created by leko on 2016/1/15.
  */
 public class ContainerInfo {
-    private String IYCCNTRNO;                    //唯一箱号
+    private String containerId;                 //唯一箱id
+    private String IYCCNTRNO;                    //箱号
     private String IYCCNTRAREAID;             //箱所在箱区号
     private Integer IYCVOYID;                     //航次ID
 
@@ -19,6 +20,14 @@ public class ContainerInfo {
     private String IYCYLOCATION;                 //场箱位
     private String IYCPLANFG;                    //是否可配载
     private String IYCRETIME;                    //当前作业该箱所需的倒箱时间
+
+    public String getContainerId() {
+        return containerId;
+    }
+
+    public void setContainerId(String containerId) {
+        this.containerId = containerId;
+    }
 
     public String getIYCCNTRNO() {
         return IYCCNTRNO;
