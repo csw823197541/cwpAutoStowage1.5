@@ -7,7 +7,7 @@ public class ContainerInfo {
     private String containerId;                 //唯一箱id
     private String IYCCNTRNO;                    //箱号
     private String IYCCNTRAREAID;             //箱所在箱区号
-    private Integer IYCVOYID;                     //航次ID
+    private Long IYCVOYID;                     //航次ID
 
     private String IYCCTYPECD;                   //箱型
     private String IYCCSZCSIZECD;              //尺寸
@@ -45,11 +45,11 @@ public class ContainerInfo {
         this.IYCCNTRAREAID = IYCCNTRAREAID;
     }
 
-    public Integer getIYCVOYID() {
+    public Long getIYCVOYID() {
         return IYCVOYID;
     }
 
-    public void setIYCVOYID(Integer IYCVOYID) {
+    public void setIYCVOYID(Long IYCVOYID) {
         this.IYCVOYID = IYCVOYID;
     }
 

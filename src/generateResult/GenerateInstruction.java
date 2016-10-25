@@ -1,5 +1,7 @@
 package generateResult;
 
+import importDataInfo.AreaRestTaskInfo;
+import importDataInfo.AreaToCraneInfo;
 import importDataInfo.MoveInfo;
 import importDataProcess.ExceptionData;
 
@@ -13,14 +15,15 @@ public class GenerateInstruction {
 
     public static List<MoveInfo> getWorkInstruction(Long batchNum,
                                                     List<MoveInfo> moveInfoList,
-                                                    Date curInstructionTime,
-                                                    Integer timeInterval) {
+                                                    Integer timeInterval,
+                                                    List<AreaRestTaskInfo> areaRestTaskInfoList,
+                                                    List<AreaToCraneInfo> areaToCraneInfoList) {
         ExceptionData.exceptionMap.put(batchNum, "接口方法没有执行。");
         List<MoveInfo> resultList = new ArrayList<>();
 
         sortByStartTime(moveInfoList); //按计划作业开始时间排序（升序）
 
-        MoveInfo firstMove = findFirstMove(curInstructionTime, moveInfoList);
+        MoveInfo firstMove = findFirstMove(moveInfoList);
         long firstST = firstMove.getWorkingStartTime().getTime();
 
         if (timeInterval == null) { //间隔时间，默认是30分钟
@@ -31,7 +34,7 @@ public class GenerateInstruction {
         String info = "";
         for (MoveInfo moveInfo : moveInfoList) {
             String status = moveInfo.getWorkStatus();
-            if ("R".equals(status)) {
+            if ("Y".equals(status) || "S".equals(status) || "P".equals(status)) {
                 long startTime = moveInfo.getWorkingStartTime().getTime();
                 if (startTime >= firstST && startTime <= firstST + timeInterval * 60 * 1000) {
                     if (!isUnderEmpty(moveInfo, moveInfoList) && isWorkFlowOk(moveInfo, moveInfoList)) {
@@ -52,19 +55,15 @@ public class GenerateInstruction {
         return resultList;
     }
 
-
-
     private static boolean isUnderEmpty(MoveInfo moveInfo, List<MoveInfo> moveInfoList) {
         boolean isUnderEmpty = false;
         String craneId = moveInfo.getCraneNo();
-        Integer moveNum = moveInfo.getMoveNum();
+        Long moveNum = moveInfo.getMoveNum();
+        String vesselPosition = moveInfo.getVesselPosition();
         for (MoveInfo moveInfo1 : moveInfoList) {
             if (craneId.equals(moveInfo1.getCraneNo())) {
-                if (moveInfo1.getMoveNum() < moveNum) {
-                    if ("?".equals(moveInfo1.getContainerId()) || "".equals(moveInfo1.getWorkStatus())) {
-                        isUnderEmpty = true;
-                    }
-                }
+                String vesselPosition1 = moveInfo.getVesselPosition();
+
             }
         }
         return isUnderEmpty;
@@ -73,14 +72,14 @@ public class GenerateInstruction {
     private static boolean isWorkFlowOk(MoveInfo moveInfo, List<MoveInfo> moveInfoList) {
         boolean isWorkFlowOk = true;
         String craneId = moveInfo.getCraneNo();
-        Integer moveNum = moveInfo.getMoveNum();
+        Long moveNum = moveInfo.getMoveNum();
         String workFlow = moveInfo.getWorkFlow();
         String LD = moveInfo.getMoveKind();
         if ("L".equals(LD)) {
             if ("2".equals(workFlow) || "3".equals(workFlow)) {
                 int containerNum = 0;
                 for (MoveInfo moveInfo1 : moveInfoList) {
-                    if (craneId.equals(moveInfo1.getCraneNo()) && moveNum == moveInfo1.getMoveNum()) {
+                    if (craneId.equals(moveInfo1.getCraneNo()) && moveNum.longValue() == moveInfo1.getMoveNum().longValue()) {
                         if (!"?".equals(moveInfo1.getContainerId())) {
                             containerNum++;
                         }
@@ -94,10 +93,12 @@ public class GenerateInstruction {
         return isWorkFlowOk;
     }
 
-    private static MoveInfo findFirstMove(Date curInstructionTime, List<MoveInfo> moveInfoList) {
+    private static MoveInfo findFirstMove(List<MoveInfo> moveInfoList) {
         MoveInfo firstMove = new MoveInfo();
         for (MoveInfo moveInfo : moveInfoList) {
-            if (curInstructionTime.compareTo(moveInfo.getWorkingStartTime()) == -1) {
+            if ("Y".equals(moveInfo.getWorkStatus())
+                    || "S".equals(moveInfo.getWorkStatus())
+                    || "P".equals(moveInfo.getWorkStatus()) ) {
                 firstMove = moveInfo;
                 break;
             }

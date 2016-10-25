@@ -12,11 +12,11 @@ public class MoveInfo {
 
     private String vpcCntrId;                    //唯一编号
     private String craneNo;                 //桥机号
-    private Integer moveNum;                     //桥机作业顺序号
+    private Long moveNum;                     //桥机作业顺序号
     private String moveKind;                //装卸标志
     private String containerId;                  //箱Id号
     private String size;              //箱尺寸
-    private String areaPosition;      //计划提箱位置, 场
+    private String areaPosition;      //计划提箱位置, 场箱位
     private String vesselPosition;       //计划放箱位置, 船箱位：倍.排.层
 
     private Date workingStartTime;    //cwp计划开始时间
@@ -25,11 +25,11 @@ public class MoveInfo {
     private String workFlow;    //作业工艺
     private Long voyId; //航次Id，进口航次或出口航次
 
-    private String workStatus; //指令状态
-    private String workIsExchange; //指令是否可以交换
-    private String workIsRepeal; //指令是否可以撤销
+    private String workStatus; //指令状态:已发送A; 完成C,RC; 作业中W; 未发送Y,S,P; 退卸或退装R
+    private String workExchangeLabel; //指令是否可以交换标识
+    private String workIsCancel; //指令是否可以撤销
 
-    private Integer carryOrder; //装上AGV的顺序
+    private Long carryOrder; //装上AGV的顺序
 
     public String getVpcCntrId() {
         return vpcCntrId;
@@ -47,11 +47,11 @@ public class MoveInfo {
         this.craneNo = craneNo;
     }
 
-    public Integer getMoveNum() {
+    public Long getMoveNum() {
         return moveNum;
     }
 
-    public void setMoveNum(Integer moveNum) {
+    public void setMoveNum(Long moveNum) {
         this.moveNum = moveNum;
     }
 
@@ -135,27 +135,27 @@ public class MoveInfo {
         this.workStatus = workStatus;
     }
 
-    public String getWorkIsExchange() {
-        return workIsExchange;
+    public String getWorkExchangeLabel() {
+        return workExchangeLabel;
     }
 
-    public void setWorkIsExchange(String workIsExchange) {
-        this.workIsExchange = workIsExchange;
+    public void setWorkExchangeLabel(String workExchangeLabel) {
+        this.workExchangeLabel = workExchangeLabel;
     }
 
-    public String getWorkIsRepeal() {
-        return workIsRepeal;
+    public String getWorkIsCancel() {
+        return workIsCancel;
     }
 
-    public void setWorkIsRepeal(String workIsRepeal) {
-        this.workIsRepeal = workIsRepeal;
+    public void setWorkIsCancel(String workIsCancel) {
+        this.workIsCancel = workIsCancel;
     }
 
-    public Integer getCarryOrder() {
+    public Long getCarryOrder() {
         return carryOrder;
     }
 
-    public void setCarryOrder(Integer carryOrder) {
+    public void setCarryOrder(Long carryOrder) {
         this.carryOrder = carryOrder;
     }
 }
