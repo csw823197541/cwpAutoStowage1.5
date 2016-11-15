@@ -6,8 +6,8 @@ package importDataInfo;
  */
 public class AreaRestTaskInfo {
 
-    private String areaNo; //ÏäÇøºÅ
-    private Integer restTaskNumber; //ÏäÇø»¹ÄÜ×÷Òµ¶àÉÙÈÎÎñÊı
+    private String areaNo; //ç®±åŒºå·
+    private Integer restTaskNumber; //ç®±åŒºè¿˜èƒ½ä½œä¸šå¤šå°‘ä»»åŠ¡æ•°
 
     public String getAreaNo() {
         return areaNo;

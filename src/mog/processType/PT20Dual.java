@@ -27,8 +27,13 @@ public class PT20Dual implements IProcessType {
                 if(oppositeMOSlot.getMoContainer() != null) {   //对面slot有箱子，取对面箱子的属性进行判断
                     MOContainer oppositeContainer = oppositeMOSlot.getMoContainer();
                     if("20".equals(oppositeContainer.size)) {   //对面是20尺的箱子，暂时判断为可以双箱吊
-                        moSlotPositionSet.add(moSlotPosition);
-                        moSlotPositionSet.add(oppositeMOSlot.getMoSlotPosition());
+                        if (Math.abs(moContainer.weightKg - oppositeContainer.weightKg) <= 10000
+                                && moContainer.type.equals(oppositeContainer.type)) {
+                            moSlotPositionSet.add(moSlotPosition);
+                            moSlotPositionSet.add(oppositeMOSlot.getMoSlotPosition());
+                        }
+//                        moSlotPositionSet.add(moSlotPosition);
+//                        moSlotPositionSet.add(oppositeMOSlot.getMoSlotPosition());
                     }
                 }
             }

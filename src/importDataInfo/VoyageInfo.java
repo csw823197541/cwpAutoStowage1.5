@@ -8,7 +8,7 @@ import java.util.Date;
  */
 public class VoyageInfo {
 
-    private Integer VOTVOYID;//航次ID
+    private Integer VOTVOYID;//艘次ID
     private String VESSELID;//船舶ID
     private Date VOTPWKSTTM;//计划开工时间
     private Date VOTPWKENTM;//计划完工时间

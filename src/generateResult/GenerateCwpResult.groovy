@@ -61,8 +61,8 @@ class GenerateCwpResult {
 //                    cwpResultStr = CallCwpTest.cwp(craneJsonStr, hatchJsonStr, moveJsonStr, craneSize - 1 + "", increaseTime, decreaseTime);
 //                }
 
-//                cwpResultStr = CallCwpTest.cwp(craneJsonStr, hatchJsonStr, moveJsonStr, craneSize - 1 + "", increaseTime, decreaseTime);
-                cwpResultStr = CallCwpTest.cwp(craneJsonStr, hatchJsonStr, moveJsonStr, "4", "1000000", "2000000");
+                cwpResultStr = CallCwpTest.cwp(craneJsonStr, hatchJsonStr, moveJsonStr, craneSize + "", increaseTime, decreaseTime);
+//                cwpResultStr = CallCwpTest.cwp(craneJsonStr, hatchJsonStr, moveJsonStr, "4", "1000000", "2000000");
             } catch (Exception e) {
                 e.printStackTrace();
             }

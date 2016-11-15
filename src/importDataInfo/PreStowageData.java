@@ -4,7 +4,7 @@ package importDataInfo;
  * Created by leko on 2016/1/17.
  */
 public class PreStowageData {
-    private String VHTID;          //舱位ID
+    private String VHTID;          //舱ID
     private String VBYBAYID;      //倍位ID
     private String VTRTIERNO;     //层号
     private String VRWROWNO;      //排号
@@ -18,7 +18,6 @@ public class PreStowageData {
     private String QCNO;     //桥机号
     private String DSTPORT;  //目的港
     private String THROUGHFLAG;  //过境箱标记
-
     private String containerNum;    //箱号
     private String containerStatus;     //箱子状态
 

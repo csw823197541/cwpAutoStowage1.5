@@ -28,8 +28,13 @@ public class PT40Dual implements IProcessType {
                     if(nextMOSlot.getMoContainer() != null) {   //后面slot有箱子，如果不能满足双吊具的，就表示该slot只能单吊具
                         MOContainer nextContainer = nextMOSlot.getMoContainer();
                         if(nextContainer.size.startsWith("4")) {   //后面是40尺或45尺的箱子，暂时表示可以做双吊具
-                            moSlotPositionSet.add(moSlotPosition);
-                            moSlotPositionSet.add(nextMOSlot.getMoSlotPosition());
+                            if (Math.abs(moContainer.weightKg - nextContainer.weightKg) <= 10000
+                                    && moContainer.type.equals(nextContainer.type)) {
+                                moSlotPositionSet.add(moSlotPosition);
+                                moSlotPositionSet.add(nextMOSlot.getMoSlotPosition());
+                            }
+//                            moSlotPositionSet.add(moSlotPosition);
+//                            moSlotPositionSet.add(nextMOSlot.getMoSlotPosition());
                         }
                     }
                 }

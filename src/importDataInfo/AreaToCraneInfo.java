@@ -6,10 +6,10 @@ package importDataInfo;
  */
 public class AreaToCraneInfo {
 
-    private String vpcCntrId; //Ö¸ÁîÎ¨Ò»±àºÅ
-    private String areaNo; //ÏäÇøºÅ
-    private String craneNo; //ÇÅµõºÅ
-    private Double areaToCraneTime; //ÏäÇøµ½ÇÅµõµÄºÄ¶à³¤Ê±¼ä
+    private String vpcCntrId;  //æŒ‡ä»¤å”¯ä¸€ç¼–å·
+    private String areaNo; //ç®±åŒºå·
+    private String craneNo; //æ¡¥åŠå·
+    private Double areaToCraneTime; //ç®±åŒºåˆ°æ¡¥åŠçš„è€—å¤šé•¿æ—¶é—´
 
     public String getVpcCntrId() {
         return vpcCntrId;

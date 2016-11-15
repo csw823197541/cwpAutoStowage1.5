@@ -6,9 +6,9 @@ package importDataInfo;
  */
 public class VesselStructureInfo {
 
-    private String VHTID;//舱次ID
+    private String VHTID;//舱ID
     private Integer LENGTH;//舱位长度
-    private Double VHTPOSITION; //舱开始相对于船头位置
+    private Double VHTPOSITION; //舱开始处相对于船头位置
     private String VBYBAYID;//倍位ID
     private Double VBYPOSITION;//倍位中心相对于船头位置
     private String VTRTIERNO;//层号
@@ -18,9 +18,9 @@ public class VesselStructureInfo {
     private String groupId;//属性组
     private Integer CABPOSITION;//驾驶室位置信息
     private Integer CABLENGTH;//驾驶室长度
+    private Integer weightGradeMin; //重量等级最小值
+    private Integer weightGradeMax; //重量等级最大值
 
-    private Integer weightGradeMin;      //重量等级最小值
-    private Integer weightGradeMax;      //重量等级最大值
 
     public Integer getWeightGradeMin() {
         return weightGradeMin;

@@ -7,12 +7,12 @@ import java.util.List;
  */
 public class CraneInfo {
 
+    private String ID;//桥吊ID
     private Integer CURRENTPOSITION;//当前位置
     private Integer DISCHARGEEFFICIENCY20;//卸船20英尺箱效率
     private Integer DISCHARGEEFFICIENCY40;//卸船40英尺箱效率
     private Integer DISCHARGEEFFICIENCYTWIN;//卸船双吊具效率
     private Integer DISCHARGEEFFICIENCYTDM;//卸船双箱吊效率
-    private String ID;//桥吊ID
     private Integer LOADINGEFFICIENCY20;//装船20英尺箱效率
     private Integer LOADINGEFFICIENCY40;//装船40英尺箱效率
     private Integer LOADINGEFFICIENCYTWIN;//装船双吊具效率
@@ -22,7 +22,7 @@ public class CraneInfo {
     private String NAME;//桥吊编号
     private Integer SAFESPAN;//安全距离
     private Integer SEQ;//桥吊序列号
-    private Integer SPEED;//移动速度
+    private Integer SPEED;//移动速度，米/分钟
     private Integer WIDTH;//桥吊宽度
     private List<WorkingTimeRange> WORKINGTIMERANGES;//工作时间
 

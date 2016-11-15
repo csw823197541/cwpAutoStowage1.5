@@ -6,7 +6,7 @@ package autoStow;
 public class CallAutoStow {
 
     static {
-        System.loadLibrary("AutoStowToJava7");
+        System.loadLibrary("AutoStowToJava8");
     }
 
     public static native String callAutoStow(String str1, String str2, String str3, String str4);
