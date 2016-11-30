@@ -122,6 +122,7 @@ public class GenerateInstruction {
         boolean isWorkFlowOk = true;
         String craneId = moveInfo.getCraneNo();
         Long moveNum = moveInfo.getMoveNum();
+        String hatchId = moveInfo.getHatchId();
         String workFlow = moveInfo.getWorkFlow();
         String LD = moveInfo.getMoveKind();
         Date stTime = moveInfo.getWorkingStartTime();
@@ -129,7 +130,7 @@ public class GenerateInstruction {
             if ("2".equals(workFlow) || "3".equals(workFlow)) {
                 int containerNum = 0;
                 for (MoveInfo moveInfo1 : moveInfoList) {
-                    if (craneId.equals(moveInfo1.getCraneNo()) && stTime.compareTo(moveInfo1.getWorkingStartTime()) == 0) {
+                    if (craneId.equals(moveInfo1.getCraneNo()) && moveNum.longValue() == moveInfo1.getMoveNum().longValue() && hatchId.equals(moveInfo1.getHatchId())) {
                         if (!"?".equals(moveInfo1.getContainerId())) {
                             containerNum++;
                         }

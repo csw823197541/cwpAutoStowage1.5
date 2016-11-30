@@ -31,6 +31,16 @@ public class MoveInfo {
 
     private Long carryOrder; //装上AGV的顺序
 
+    private String hatchId; //舱Id
+
+    public String getHatchId() {
+        return hatchId;
+    }
+
+    public void setHatchId(String hatchId) {
+        this.hatchId = hatchId;
+    }
+
     public String getVpcCntrId() {
         return vpcCntrId;
     }

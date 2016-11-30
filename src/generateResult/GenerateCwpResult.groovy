@@ -199,11 +199,14 @@ class GenerateCwpResult {
             Integer startPosition = voyageInfoList.get(0).getSTARTPOSITION();//船头开始位置
 
             //计算舱开始相对于船头位置、倍位中心相对于船头位置
+            Map<String, Double> hatchPositionMap = new HashMap<>();
             List<String> hatchIdList = new ArrayList<>();
             List<String> bayWeiIdList = new ArrayList<>();
             for (VesselStructureInfo vesselStructureInfo : vesselStructureInfoList) {
-                if (!hatchIdList.contains(vesselStructureInfo.getVHTID()))
+                if (!hatchIdList.contains(vesselStructureInfo.getVHTID())) {
                     hatchIdList.add(vesselStructureInfo.getVHTID())
+                    hatchPositionMap.put(vesselStructureInfo.getVHTID(), vesselStructureInfo.getVHTPOSITION())
+                }
                 if (!bayWeiIdList.contains(vesselStructureInfo.getVBYBAYID()))
                     bayWeiIdList.add(vesselStructureInfo.getVBYBAYID())
             }//统计倍舱位数和倍位数
@@ -220,39 +223,47 @@ class GenerateCwpResult {
                 hatchBayWeiMap.put(hatchId, bayWeiSet)
             }
 
-            //计算舱绝对位置坐标
-            Map<String, Double> hatchPositionMap = new HashMap<>();
-            int i = 0;
             int length = vesselStructureInfoList.get(0).getLENGTH()//舱长度
             int cabL = vesselStructureInfoList.get(0).getCABLENGTH()   //驾驶室长度
             int cabPosition = vesselStructureInfoList.get(0).getCABPOSITION();//驾驶室在哪个倍位号后面
-//        int cabPosition = 30
-            String cabBayWei = String.format("%02d", cabPosition);
-            String cabHatchId = null;
-            Collections.sort(hatchIdList)
-            for (int j = 0; j < hatchIdList.size(); j++) {//查找到驾驶室在哪个舱
-                List<String> bayWeiList = hatchBayWeiMap.get(hatchIdList.get(j)).toList()
-                if (bayWeiList.contains(cabBayWei)) {//取后面一个舱号
-                    cabHatchId = hatchIdList.get(j + 1)
+
+            boolean isAllHavePosition = true;
+            for (Double d: hatchPositionMap.values()) {
+                if (d == null) {
+                    isAllHavePosition = false
                 }
-                if (bayWeiList.size() == 2) {
-                    if (cabPosition == (Integer.valueOf(bayWeiList.get(0)) +
-                            Integer.valueOf(bayWeiList.get(1))) / 2) {
+            }
+            if (!isAllHavePosition) {
+                int i = 0;
+                String cabBayWei = String.format("%02d", cabPosition);
+                String cabHatchId = null;
+                Collections.sort(hatchIdList)
+                for (int j = 0; j < hatchIdList.size(); j++) {//查找到驾驶室在哪个舱
+                    List<String> bayWeiList = hatchBayWeiMap.get(hatchIdList.get(j)).toList()
+                    if (bayWeiList.contains(cabBayWei)) {//取后面一个舱号
                         cabHatchId = hatchIdList.get(j + 1)
                     }
+                    if (bayWeiList.size() == 2) {
+                        if (cabPosition == (Integer.valueOf(bayWeiList.get(0)) +
+                                Integer.valueOf(bayWeiList.get(1))) / 2) {
+                            cabHatchId = hatchIdList.get(j + 1)
+                        }
+                    }
                 }
-            }
-//        Double cjj = 3.28//舱间距3.28英尺
-            Double cjj = 1.0//舱间距1米
-            Double cabLength = 0.0;
-            for (String hatchId : hatchIdList) {
-                if (hatchId.equals(cabHatchId)) {//当前舱前面有驾驶室
-                    cabLength = cabL + cjj
-                }
-                hatchPositionMap.put(hatchId, Double.valueOf(df.format(startPosition + cabLength + i * (length + cjj))))
+                Double cjj = 1.0//舱间距1米
+                Double cabLength = 0.0;
+                for (String hatchId : hatchIdList) {
+                    if (hatchId.equals(cabHatchId)) {//当前舱前面有驾驶室
+                        cabLength = cabL + cjj
+                    }
+                    hatchPositionMap.put(hatchId, Double.valueOf(df.format(startPosition + cabLength + i * (length + cjj))))
 //假设舱间距为2米，这个数据码头还没回复我是否合理
-                i++
+                    i++
+                }
             }
+
+            //计算舱绝对位置坐标
+//            Map<String, Double> hatchPositionMap = new HashMap<>();
 
             //计算倍位的中心绝对位置坐标
             Map<String, Double> bayWeiPositionMap = new HashMap<>();
