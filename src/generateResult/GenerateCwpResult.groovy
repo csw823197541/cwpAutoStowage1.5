@@ -197,6 +197,11 @@ class GenerateCwpResult {
 
         try {
             Integer startPosition = voyageInfoList.get(0).getSTARTPOSITION();//船头开始位置
+            Integer endPosition = voyageInfoList.get(0).getENDPOSITION();
+            boolean isPositive = true;
+            if ("R".equals(voyageInfoList.get(0).getAnchorDirection())) {
+                isPositive = false;
+            }
 
             //计算舱开始相对于船头位置、倍位中心相对于船头位置
             Map<String, Double> hatchPositionMap = new HashMap<>();
@@ -205,7 +210,15 @@ class GenerateCwpResult {
             for (VesselStructureInfo vesselStructureInfo : vesselStructureInfoList) {
                 if (!hatchIdList.contains(vesselStructureInfo.getVHTID())) {
                     hatchIdList.add(vesselStructureInfo.getVHTID())
-                    hatchPositionMap.put(vesselStructureInfo.getVHTID(), vesselStructureInfo.getVHTPOSITION())
+                    if (vesselStructureInfo.getVHTPOSITION() != null) {
+                        Double p = 0.0;
+                        if (isPositive) {
+                            p = startPosition + vesselStructureInfo.getVHTPOSITION();
+                        } else {
+                            p = endPosition - vesselStructureInfo.getVHTPOSITION();
+                        }
+                        hatchPositionMap.put(vesselStructureInfo.getVHTID(), p)
+                    }
                 }
                 if (!bayWeiIdList.contains(vesselStructureInfo.getVBYBAYID()))
                     bayWeiIdList.add(vesselStructureInfo.getVBYBAYID())
@@ -228,6 +241,9 @@ class GenerateCwpResult {
             int cabPosition = vesselStructureInfoList.get(0).getCABPOSITION();//驾驶室在哪个倍位号后面
 
             boolean isAllHavePosition = true;
+            if (hatchPositionMap.size() == 0) {
+                isAllHavePosition = false;
+            }
             for (Double d: hatchPositionMap.values()) {
                 if (d == null) {
                     isAllHavePosition = false
@@ -256,8 +272,13 @@ class GenerateCwpResult {
                     if (hatchId.equals(cabHatchId)) {//当前舱前面有驾驶室
                         cabLength = cabL + cjj
                     }
-                    hatchPositionMap.put(hatchId, Double.valueOf(df.format(startPosition + cabLength + i * (length + cjj))))
-//假设舱间距为2米，这个数据码头还没回复我是否合理
+                    Double p = 0.0;
+                    if (isPositive) {
+                        p = startPosition + cabLength + i * (length + cjj);
+                    } else {
+                        p = endPosition - (cabLength + i * (length + cjj));
+                    }
+                    hatchPositionMap.put(hatchId, Double.valueOf(df.format(p)))//假设舱间距为2米，这个数据码头还没回复我是否合理
                     i++
                 }
             }

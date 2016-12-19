@@ -134,10 +134,13 @@ public class POChooser2 {
         return result;
     }
 
-    public List<MOSlot> getTopMOSlotList(Map<Integer, MOSlotStack> bay, MOSlotBlock moSlotBlock) {
+    public List<MOSlot> getTopMOSlotList(Map<Integer, MOSlotStack> bay, MOSlotBlock moSlotBlock, boolean isPositive) {
         List<MOSlot> moSlotList = new ArrayList<>();
-        for (int j = 0; j < moSlotBlock.getRowSeqList().size(); j++) {
-            int row = moSlotBlock.getRowSeqList().get(j);
+
+        List<Integer> rowSeqList = moSlotBlock.getRowSeqList();
+
+        for (int j = 0; j < rowSeqList.size(); j++) {
+            int row = rowSeqList.get(j);
             MOSlotStack moSlotStack = bay.get(row);
             if (moSlotStack != null) {
                 MOSlot moSlotTop = moSlotStack.getTopMOSlot();
@@ -150,9 +153,9 @@ public class POChooser2 {
     }
 
     //处理卸船编MoveOrder的过程
-    public int processD(WorkType wt, Map<Integer, MOSlotStack> bay, MOSlotBlock moSlotBlock) {
+    public int processD(WorkType wt, Map<Integer, MOSlotStack> bay, MOSlotBlock moSlotBlock, boolean isPositive) {
 
-        List<MOSlot> moSlotList = this.getTopMOSlotList(bay, moSlotBlock);
+        List<MOSlot> moSlotList = this.getTopMOSlotList(bay, moSlotBlock, isPositive);
 
         List<Integer> rowList = TraverseOrder.getDRowList(moSlotList);
 
@@ -215,7 +218,7 @@ public class POChooser2 {
     }
 
     //处理装船编moveOrder的过程
-    private int processL(WorkType wt, Map<Integer, MOSlotStack> bay, MOSlotBlock moSlotBlock) {
+    private int processL(WorkType wt, Map<Integer, MOSlotStack> bay, MOSlotBlock moSlotBlock, boolean isPositive) {
 
         List<MOSlot> moSlotList = this.getBottomMOSlotList(bay, moSlotBlock);
 
@@ -266,7 +269,7 @@ public class POChooser2 {
         return count;
     }
 
-    public MOSlotBlock processOrderAD(MOSlotBlock moSlotBlock, WorkType[] workTypes) {
+    public MOSlotBlock processOrderAD(MOSlotBlock moSlotBlock, WorkType[] workTypes, boolean isPositive) {
 
         Map<Integer, MOSlotStack> bay01 = moSlotBlock.getBay01();
         Map<Integer, MOSlotStack> bay03 = moSlotBlock.getBay03();
@@ -285,13 +288,13 @@ public class POChooser2 {
                 if (isContinueSameTPTop(wt, moSlotBlock)) {
                     int count01 = -1, count03 = -1;
                     W:while (isContinueSameTPTopBay(wt, bay01)) {
-                        count01= this.processD(wt, bay01, moSlotBlock);
+                        count01= this.processD(wt, bay01, moSlotBlock, isPositive);
                         if (count01 == 0) {
                             break W;
                         }
                     }
                     W:while (isContinueSameTPTopBay(wt, bay03)) {
-                        count03= this.processD(wt, bay03, moSlotBlock);
+                        count03= this.processD(wt, bay03, moSlotBlock, isPositive);
                         if (count03 == 0) {
                             break W;
                         }
@@ -348,7 +351,7 @@ public class POChooser2 {
         return moSlotBlock;
     }
 
-    public MOSlotBlock processOrderBL(MOSlotBlock moSlotBlock, WorkType[] workTypes) {
+    public MOSlotBlock processOrderBL(MOSlotBlock moSlotBlock, WorkType[] workTypes, boolean isPositive) {
 
         Map<Integer, MOSlotStack> bay01 = moSlotBlock.getBay01();
         Map<Integer, MOSlotStack> bay03 = moSlotBlock.getBay03();
@@ -366,13 +369,13 @@ public class POChooser2 {
                 if (isContinueSameTPBottom(wt, moSlotBlock)) {
                     int count01 = -1, count03 = -1;
                     W:while (isContinueSameTPBottomBay(wt, bay01)) {
-                        count01= this.processL(wt, bay01, moSlotBlock);
+                        count01= this.processL(wt, bay01, moSlotBlock, isPositive);
                         if (count01 == 0) {
                             break W;
                         }
                     }
                     W:while (isContinueSameTPBottomBay(wt, bay03)) {
-                        count03= this.processL(wt, bay03, moSlotBlock);
+                        count03= this.processL(wt, bay03, moSlotBlock, isPositive);
                         if (count03 == 0) {
                             break W;
                         }
