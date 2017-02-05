@@ -195,16 +195,16 @@ public class GenerateMoveOrder {
                 MOSlotBlock moSlotBlockAD = PTProcess.PTChooserProcess(preStowageListAD, initMOSlotBlockAD, PTSeq);
                 //对甲板上卸船的block调用编MoveOrder的方法
                 POChooser2 poChooser = new POChooser2();
-                poChooser.processOrderAD(moSlotBlockAD, workTypesD, isPositive);
+                poChooser.processOrderAD(moSlotBlockAD, workTypesD, false);
 
                 MOSlotBlock moSlotBlockBD = PTProcess.PTChooserProcess(preStowageListBD, initMOSlotBlockBD, PTSeq);
-                poChooser.processOrderAD(moSlotBlockBD, workTypesD, isPositive);
+                poChooser.processOrderAD(moSlotBlockBD, workTypesD, true);
 
                 MOSlotBlock moSlotBlockBL = PTProcess.PTChooserProcess(preStowageListBL, initMOSlotBlockBL, PTSeq);
-                poChooser.processOrderBL(moSlotBlockBL, workTypesL, isPositive);
+                poChooser.processOrderBL(moSlotBlockBL, workTypesL, true);
 
                 MOSlotBlock moSlotBlockAL = PTProcess.PTChooserProcess(preStowageListAL, initMOSlotBlockAL, PTSeq);
-                poChooser.processOrderBL(moSlotBlockAL, workTypesL, isPositive);
+                poChooser.processOrderBL(moSlotBlockAL, workTypesL, false);
 
                 //完成作业工艺和MoveOrder后,将数据进行保存
                 for (PreStowageData preStowageData : preStowageList) {
